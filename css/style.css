@@ -3,7 +3,7 @@ File: style.css
 GUI Assignment: Styling for Gym Journey Website
 Christian Blake, UMass Lowell Computer Science, christian_blake@student.uml.edu
 Copyright (c) 2025 by Christian Blake. All rights reserved.
-Created on May 27th, 2025
+Created from May 22nd, 2025 to May 28th, 2025
 Description: CSS styling for gym journey website with grey/red theme
 */
 
@@ -233,7 +233,7 @@ footer a {
     color: #ff6b6b;
 }
 
-/* Responsive Design */
+/* Responsive Design - very important for mobile device viewing*/
 @media (max-width: 768px) {
     header h1 {
         font-size: 1.8rem;
