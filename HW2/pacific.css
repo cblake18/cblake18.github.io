@@ -1,0 +1,104 @@
+header, hgroup, nav, footer, figure, figcaption, aside, section, article {
+	display: block;
+}
+body {
+	background-color: #00569f;
+	background-image: url(ptrbackground.jpg);
+	background-repeat: repeat-x;
+	background-position: top;
+	color: #666666;
+	font-family: Arial, Helvetica, sans-serif;
+	margin-top: 20px;
+}
+#wrapper {
+	background-color: #9CC6E0;
+	width: 80%;
+	min-width: 600px;
+	margin: 0 auto;
+	/* box-shadow: 0 0 5px #333; */
+	overflow: hidden;
+}
+header {
+	background-image: url(sunset.jpg);
+	background-color: #000039;
+	background-position: right;
+	background-repeat: no-repeat;
+	height: 60px;
+	padding-top: 0;
+}
+nav {
+	float: left;
+	width: 160px;
+	padding: 20px 5px 0 20px;
+	height: 100%;
+}
+nav ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	font-size: 1.2em;
+}
+nav li { 
+	/* padding: 5px 0; */
+	font-weight:600;
+}
+nav a {
+	text-decoration: none;
+}
+nav a:link {
+	color: #000033;
+}
+nav a:visited {
+	color: #344873;
+}
+nav a:hover {
+	color: #FFFFFF;
+}
+#content {
+	background-color: #FFFFFF;
+	margin-left: 190px;
+	padding: 1px 20px 20px 20px;
+	min-height: 300px;
+}
+#content img {
+	float: left;
+	padding: 0 20px 20px 0;
+}
+#content ul {
+	list-style-image: url(marker.gif);
+	margin-left: 0;
+}
+.resort {
+	font-weight: bold;
+	color: #687498;
+}
+h1 {
+	margin: 0;
+	padding: 10px;
+	color: white;
+	background-color: transparent;
+}
+h2 {
+	color: #3399CC;
+}
+h1,
+h2 {
+	font-family: Georgia, "Times New Roman", serif;
+}
+#contact {
+	font-size: 90%;
+	padding-top: 20px;
+}
+dt {
+	color: #000033;
+}
+footer {
+	font-family: Georgia, "Times New Roman", serif;
+	font-size: 0.7em;
+	font-style: italic;
+	text-align: left;
+	padding: 10px;
+	background-color: #FFFFFF;
+	margin-left: 190px;
+}
+
