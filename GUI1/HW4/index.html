@@ -1,0 +1,71 @@
+<!-- Copyright 2025 Christian Blake -->
+<!-- Sources: 
+    - https://jqueryvalidation.org/
+    - https://cdnjs.com/libraries/jquery-validate
+-->
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>My Multiplication Table - HW4 Part 1</title>
+        <link rel="stylesheet" href="css/styles.css">
+        
+        <!-- CDN jQuery/jQuery Validation Plugin -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Multiplication Table - HW4 Part 1</h1>
+            <div class="form-container">
+                <h2>Please enter a table range:</h2>
+
+                <form id="tableForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="minCol">Minimum column value</label>
+                            <input type="number" id="minCol" name="minCol" required>
+                            <div class="error-message" id="minColError"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="maxCol">Maximum column value</label>
+                            <input type="number" id="maxCol" name="maxCol" required>
+                            <div class="error-message" id="maxColError"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="minRow">Minimum row value</label>
+                            <input type="number" id="minRow" name="minRow" required>
+                            <div class="error-message" id="minRowError"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="maxRow">Maximum row value</label>
+                            <input type="number" id="maxRow" name="maxRow" required>
+                            <div class="error-message" id="maxRowError"></div>
+                        </div>
+                    </div>
+
+                    <button type="submit">Generate table</button>
+                </form>
+            </div>
+
+            <div class="success-message" id="successMessage">
+                Table generated successfully!
+            </div>
+
+            <div class="table-wrapper" id="tableWrapper">
+                <div class="table-container" id="tableContainer">
+                    <!-- multiplication table will be generated here -->
+                </div>
+            </div>
+        </div>
+
+        <script src="js/script.js"></script>
+    </body>
+</html>
