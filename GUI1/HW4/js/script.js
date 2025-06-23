@@ -157,13 +157,8 @@ $(document).ready(function() {
             $(element).removeClass('error');
             $('#' + $(element).attr('name') + 'Error').removeClass('show').empty();
         },
-        
-    });
 
-    $('#generateTableBtn').on('click', function() {
-        // check if the form is valid
-        if ($('#tableForm').valid()) {
-            // if valid, get the values
+        submitHandler: function(form) {
             const values = {
                 minCol: parseInt($('#minCol').val()),
                 maxCol: parseInt($('#maxCol').val()),
@@ -171,9 +166,11 @@ $(document).ready(function() {
                 maxRow: parseInt($('#maxRow').val())
             };
             
-            // create the new tab with the table
             createTableTab(values);
             showSuccessMessage();
+            
+            // Prevent the default form submission
+            return false;
         }
     });
     
