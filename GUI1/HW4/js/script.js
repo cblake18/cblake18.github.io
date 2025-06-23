@@ -18,7 +18,7 @@ $(document).ready(function() {
     // validation constants
     const MIN_VALUE = -50;
     const MAX_VALUE = 50;
-    const MAX_TABLE_SIZE = 100;
+    const MAX_TABLE_SIZE = 101; // -50 to 50 gives 101 range
     
     // track generated tables
     let tableCount = 0;
@@ -157,8 +157,13 @@ $(document).ready(function() {
             $(element).removeClass('error');
             $('#' + $(element).attr('name') + 'Error').removeClass('show').empty();
         },
+    });
 
-        submitHandler: function(form) {
+    $('#tableForm').on('submit', function(e) {
+        e.preventDefault();
+        
+        // Force validation of all fields
+        if (validator.form()) {
             const values = {
                 minCol: parseInt($('#minCol').val()),
                 maxCol: parseInt($('#maxCol').val()),
@@ -168,10 +173,11 @@ $(document).ready(function() {
             
             createTableTab(values);
             showSuccessMessage();
-            
-            // Prevent the default form submission
-            return false;
         }
+    });
+
+    $('#tableForm input[type="number"]').on('blur', function() {
+        validator.element(this);
     });
     
     // initialize sliders with two-way binding
@@ -208,31 +214,62 @@ $(document).ready(function() {
             
             // bind input changes to slider
             $input.on('input change', function() {
-                const value = parseInt($(this).val());
-                if (!isNaN(value) && value >= MIN_VALUE && value <= MAX_VALUE) {
-                    $slider.slider('value', value);
-                    $valueDisplay.text(value);
-                    updatePreview();
+                let value = parseInt($(this).val());
+                
+                // enforce min/max limits
+                if (isNaN(value)) {
+                    return;
                 }
+                
+                if (value < MIN_VALUE) {
+                    value = MIN_VALUE;
+                    $(this).val(value);
+                } else if (value > MAX_VALUE) {
+                    value = MAX_VALUE;
+                    $(this).val(value);
+                }
+                
+                $slider.slider('value', value);
+                $valueDisplay.text(value);
+                
+                // trigger validation after updating
+                validator.element(this);
+                updatePreview();
             });
         });
     }
     
     // update preview table
     function updatePreview() {
-        // check if form is valid
-        if ($('#tableForm').valid()) {
-            const values = {
-                minCol: parseInt($('#minCol').val()),
-                maxCol: parseInt($('#maxCol').val()),
-                minRow: parseInt($('#minRow').val()),
-                maxRow: parseInt($('#maxRow').val())
-            };
+        // get current values
+        const minCol = parseInt($('#minCol').val());
+        const maxCol = parseInt($('#maxCol').val());
+        const minRow = parseInt($('#minRow').val());
+        const maxRow = parseInt($('#maxRow').val());
+        
+        // check if all values are valid numbers
+        if (!isNaN(minCol) && !isNaN(maxCol) && !isNaN(minRow) && !isNaN(maxRow)) {
+            // manually check if the values are valid
+            const colsValid = minCol <= maxCol && minCol >= MIN_VALUE && maxCol <= MAX_VALUE;
+            const rowsValid = minRow <= maxRow && minRow >= MIN_VALUE && maxRow <= MAX_VALUE;
+            const sizeValid = (Math.abs(maxCol - minCol) + 1) <= MAX_TABLE_SIZE && 
+                            (Math.abs(maxRow - minRow) + 1) <= MAX_TABLE_SIZE;
             
-            const table = generateTable(values);
-            $('#previewContainer').html(table);
+            if (colsValid && rowsValid && sizeValid) {
+                const values = {
+                    minCol: minCol,
+                    maxCol: maxCol,
+                    minRow: minRow,
+                    maxRow: maxRow
+                };
+                
+                const table = generateTable(values);
+                $('#previewContainer').html(table);
+            } else {
+                $('#previewContainer').html('<p style="color: #666; text-align: center; padding: 20px;">Fix validation errors to see preview</p>');
+            }
         } else {
-            $('#previewContainer').html('<p style="color: #666; text-align: center; padding: 20px;">Fix validation errors to see preview</p>');
+            $('#previewContainer').html('<p style="color: #666; text-align: center; padding: 20px;">Please enter valid numbers</p>');
         }
     }
     
