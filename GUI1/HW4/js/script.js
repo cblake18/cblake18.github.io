@@ -162,7 +162,7 @@ $(document).ready(function() {
     $('#tableForm').on('submit', function(e) {
         e.preventDefault();
         
-        // Force validation of all fields
+        // force validation of all fields
         if (validator.form()) {
             const values = {
                 minCol: parseInt($('#minCol').val()),
