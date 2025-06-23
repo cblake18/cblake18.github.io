@@ -1,7 +1,11 @@
-<!-- Copyright 2025 Christian Blake -->
-<!-- Sources: 
+<!-- Copyright 2025 Christian Blake
+sources: 
     - https://jqueryvalidation.org/
     - https://cdnjs.com/libraries/jquery-validate
+    - https://jqueryui.com/slider/
+    - https://jqueryui.com/tabs/
+    - https://api.jqueryui.com/slider/
+    - https://api.jqueryui.com/tabs/
 -->
 
 <!DOCTYPE html>
@@ -9,59 +13,91 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>My Multiplication Table - HW4 Part 1</title>
+        <title>Multiplication Table</title>
+        
+        <!-- jQuery UI theme -->
+        <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/jquery-ui.css">
         <link rel="stylesheet" href="css/styles.css">
         
-        <!-- CDN jQuery/jQuery Validation Plugin -->
+        <!-- jQuery, jQuery UI, and jQuery validation plugin -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
     </head>
     <body>
         <div class="container">
-            <h1>Multiplication Table - HW4 Part 1</h1>
-            <div class="form-container">
-                <h2>Please enter a table range:</h2>
+            <h1>Multiplication Table - HW4</h1>
+            
+            <!-- tab container -->
+            <div id="tabs">
+                <ul>
+                    <li><a href="#input-tab">Table Parameters</a></li>
+                </ul>
+                
+                <!-- input tab content -->
+                <div id="input-tab">
+                    <div class="main-content">
+                        <!-- left side: form -->
+                        <div class="form-container">
+                            <h2>Please enter a table range:</h2>
 
-                <form id="tableForm">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="minCol">Minimum column value</label>
-                            <input type="number" id="minCol" name="minCol" required>
-                            <div class="error-message" id="minColError"></div>
+                            <form id="tableForm">
+                                <div class="form-group">
+                                    <label for="minCol">Minimum column value: <span class="value-display" id="minColValue">0</span></label>
+                                    <input type="number" id="minCol" name="minCol" value="0" required>
+                                    <div id="minColSlider" class="slider"></div>
+                                    <div class="error-message" id="minColError"></div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="maxCol">Maximum column value: <span class="value-display" id="maxColValue">10</span></label>
+                                    <input type="number" id="maxCol" name="maxCol" value="10" required>
+                                    <div id="maxColSlider" class="slider"></div>
+                                    <div class="error-message" id="maxColError"></div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="minRow">Minimum row value: <span class="value-display" id="minRowValue">0</span></label>
+                                    <input type="number" id="minRow" name="minRow" value="0" required>
+                                    <div id="minRowSlider" class="slider"></div>
+                                    <div class="error-message" id="minRowError"></div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="maxRow">Maximum row value: <span class="value-display" id="maxRowValue">10</span></label>
+                                    <input type="number" id="maxRow" name="maxRow" value="10" required>
+                                    <div id="maxRowSlider" class="slider"></div>
+                                    <div class="error-message" id="maxRowError"></div>
+                                </div>
+
+                                <div class="button-group">
+                                    <button type="button" id="generateTableBtn" class="primary-button">Generate Table</button>
+                                </div>
+                            </form>
+                            
+                            <!-- tab management section -->
+                            <div class="tab-management">
+                                <h3>Tab Management</h3>
+                                <button id="deleteSelectedTabs" class="delete-button">Delete Selected Tabs</button>
+                                <button id="deleteAllTabs" class="delete-button">Delete All Generated Tables</button>
+                                <div id="tabCheckboxes" class="tab-checkboxes"></div>
+                            </div>
                         </div>
 
-                        <div class="form-group">
-                            <label for="maxCol">Maximum column value</label>
-                            <input type="number" id="maxCol" name="maxCol" required>
-                            <div class="error-message" id="maxColError"></div>
+                        <!-- right side: live preview -->
+                        <div class="preview-container">
+                            <h2>Live Preview</h2>
+                            <div class="preview-wrapper">
+                                <div id="previewContainer" class="table-container">
+                                    <!-- live preview table will be generated here -->
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="minRow">Minimum row value</label>
-                            <input type="number" id="minRow" name="minRow" required>
-                            <div class="error-message" id="minRowError"></div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="maxRow">Maximum row value</label>
-                            <input type="number" id="maxRow" name="maxRow" required>
-                            <div class="error-message" id="maxRowError"></div>
-                        </div>
+                    <div class="success-message" id="successMessage">
+                        Table generated successfully!
                     </div>
-
-                    <button type="submit">Generate table</button>
-                </form>
-            </div>
-
-            <div class="success-message" id="successMessage">
-                Table generated successfully!
-            </div>
-
-            <div class="table-wrapper" id="tableWrapper">
-                <div class="table-container" id="tableContainer">
-                    <!-- multiplication table will be generated here -->
                 </div>
             </div>
         </div>

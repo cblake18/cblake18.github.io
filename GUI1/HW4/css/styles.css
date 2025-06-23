@@ -14,7 +14,7 @@ body {
 }
 
 .container {
-    max-width: 1200px;
+    max-width: 1600px;
     margin: 0 auto;
 }
 
@@ -26,30 +26,87 @@ h1 {
     text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
 }
 
-/* form styling */
-.form-container {
-    background: white;
-    border-radius: 15px;
-    padding: 30px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    margin-bottom: 30px;
+/* jQuery UI tabs customization */
+#tabs {
+    background: transparent;
+    border: none;
 }
 
-h2 {
+#tabs .ui-tabs-nav {
+    background: white;
+    border: none;
+    border-radius: 10px 10px 0 0;
+    padding: 10px 10px 0;
+    margin-bottom: 0;
+}
+
+#tabs .ui-tabs-nav li {
+    margin: 0 5px;
+}
+
+#tabs .ui-tabs-nav li a {
+    color: #2c5034;
+    font-weight: 500;
+    padding: 10px 20px;
+    border-radius: 8px 8px 0 0;
+    background: #f0f0f0;
+    border: 1px solid #ddd;
+}
+
+#tabs .ui-tabs-nav li.ui-tabs-active a {
+    background: white;
+    border-bottom: 1px solid white;
+    color: #105929;
+}
+
+#tabs .ui-tabs-panel {
+    background: white;
+    border-radius: 0 0 15px 15px;
+    padding: 0;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+/* main content layout - side by side */
+.main-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    padding: 30px;
+}
+
+/* form container - left side */
+.form-container {
+    background: #f8f9fa;
+    padding: 25px;
+    border-radius: 10px;
+    border: 1px solid #e0e0e0;
+}
+
+/* preview container - right side */
+.preview-container {
+    background: #f8f9fa;
+    padding: 25px;
+    border-radius: 10px;
+    border: 1px solid #e0e0e0;
+}
+
+.preview-wrapper {
+    background: white;
+    border-radius: 8px;
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    max-height: 500px;
+    overflow: auto;
+}
+
+h2, h3 {
     color: #2c5034;
     margin-bottom: 20px;
     font-size: 1.3em;
 }
 
 .form-group {
-    margin-bottom: 20px;
-}
-
-.form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
 }
 
 label {
@@ -60,6 +117,16 @@ label {
     font-size: 14px;
 }
 
+/* value display in labels */
+.value-display {
+    color: #105929;
+    font-weight: bold;
+    background: #e8f8eb;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-left: 5px;
+}
+
 input[type="number"] {
     width: 100%;
     padding: 12px;
@@ -67,6 +134,7 @@ input[type="number"] {
     border-radius: 8px;
     font-size: 16px;
     transition: all 0.3s ease;
+    margin-bottom: 15px;
 }
 
 input[type="number"]:focus {
@@ -75,10 +143,50 @@ input[type="number"]:focus {
     box-shadow: 0 0 0 3px rgba(52, 219, 94, 0.1);
 }
 
-/* Error state for inputs */
 input[type="number"].error {
     border-color: #e74c3c;
     background-color: #fff5f5;
+}
+
+/* jQuery UI slider customization */
+.slider {
+    margin: 15px 0;
+}
+
+.ui-slider {
+    background: #e0e0e0;
+    border: none;
+    height: 8px;
+    border-radius: 4px;
+}
+
+.ui-slider .ui-slider-handle {
+    background: linear-gradient(135deg, #66ea9d 0%, #105929 100%);
+    border: 2px solid white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    top: -6px;
+    margin-left: -10px;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    transition: transform 0.2s ease;
+}
+
+.ui-slider .ui-slider-handle:hover,
+.ui-slider .ui-slider-handle:focus {
+    transform: scale(1.2);
+    outline: none;
+}
+
+.ui-slider .ui-slider-range {
+    background: linear-gradient(135deg, #66ea9d 0%, #105929 100%);
+}
+
+/* button styling */
+.button-group {
+    text-align: center;
+    margin: 30px 0;
 }
 
 button {
@@ -90,9 +198,8 @@ button {
     font-weight: 600;
     border-radius: 8px;
     cursor: pointer;
-    display: block;
-    margin: 0 auto;
     transition: all 0.3s ease;
+    margin: 0 5px;
 }
 
 button:hover {
@@ -104,7 +211,65 @@ button:active {
     transform: translateY(0);
 }
 
-/* Error message styling for jQuery Validation */
+.delete-button {
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+    padding: 10px 20px;
+    font-size: 14px;
+}
+
+.delete-button:hover {
+    box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
+}
+
+.delete-single-tab {
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+    padding: 8px 16px;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+/* tab management section */
+.tab-management {
+    margin-top: 40px;
+    padding-top: 30px;
+    border-top: 2px solid #e0e0e0;
+}
+
+.tab-management h3 {
+    margin-bottom: 15px;
+}
+
+.tab-checkboxes {
+    margin-top: 20px;
+    padding: 15px;
+    background: white;
+    border-radius: 8px;
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #e0e0e0;
+}
+
+.tab-checkbox-label {
+    display: block;
+    padding: 8px;
+    margin: 5px 0;
+    background: #f8f9fa;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.tab-checkbox-label:hover {
+    background: #e8f8eb;
+    border-color: #66ea9d;
+}
+
+.tab-checkbox {
+    margin-right: 10px;
+}
+
+/* error message styling */
 .error-message {
     color: #e74c3c;
     font-size: 14px;
@@ -117,7 +282,6 @@ button:active {
     display: block;
 }
 
-/* jQuery Validation error label styling */
 .error-message label.error {
     display: block;
     color: #e74c3c;
@@ -126,19 +290,7 @@ button:active {
     line-height: 1.4;
 }
 
-/* Animation for error messages */
-@keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateY(-5px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Success message */
+/* success message */
 .success-message {
     background-color: #d4edda;
     border: 1px solid #c3e6cb;
@@ -146,7 +298,7 @@ button:active {
     padding: 15px;
     border-radius: 8px;
     text-align: center;
-    margin-bottom: 20px;
+    margin: 20px 30px;
     display: none;
     animation: fadeIn 0.5s ease;
 }
@@ -155,25 +307,21 @@ button:active {
     display: block;
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: scale(0.95);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
+/* table styling */
+.table-tab {
+    padding: 20px;
 }
 
-/* Table container */
 .table-wrapper {
     background: white;
     border-radius: 15px;
     padding: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
     overflow: hidden;
-    display: none;  /* Initially hidden */
+}
+
+.table-wrapper h3 {
+    margin-bottom: 15px;
+    color: #2c5034;
 }
 
 .table-container {
@@ -184,41 +332,57 @@ button:active {
     position: relative;
 }
 
-/* Custom scrollbar styling */
-.table-container::-webkit-scrollbar {
+#previewContainer {
+    max-height: 400px;
+}
+
+/* scrollbar styling */
+.table-container::-webkit-scrollbar,
+.preview-wrapper::-webkit-scrollbar {
     width: 10px;
     height: 10px;
 }
 
-.table-container::-webkit-scrollbar-track {
+.table-container::-webkit-scrollbar-track,
+.preview-wrapper::-webkit-scrollbar-track {
     background: #f1f1f1;
     border-radius: 10px;
 }
 
-.table-container::-webkit-scrollbar-thumb {
+.table-container::-webkit-scrollbar-thumb,
+.preview-wrapper::-webkit-scrollbar-thumb {
     background: #888;
     border-radius: 10px;
 }
 
-.table-container::-webkit-scrollbar-thumb:hover {
+.table-container::-webkit-scrollbar-thumb:hover,
+.preview-wrapper::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
 
-/* Table styling */
+/* table styling */
 table {
     border-collapse: collapse;
     font-size: 14px;
     position: relative;
+    width: 100%;
 }
 
 th, td {
-    padding: 12px;
+    padding: 10px;
     text-align: center;
-    min-width: 60px;
+    min-width: 50px;
     border: 1px solid #e0e0e0;
 }
 
-/* Fixed headers */
+/* preview table padding */
+#previewContainer th,
+#previewContainer td {
+    padding: 8px;
+    min-width: 40px;
+    font-size: 13px;
+}
+
 thead th {
     background: linear-gradient(135deg, #66ea9d 0%, #105929 100%);
     color: white;
@@ -239,7 +403,6 @@ tbody tr td:first-child {
     box-shadow: 2px 0 4px rgba(0,0,0,0.1);
 }
 
-/* Top-left corner cell */
 thead th:first-child {
     position: sticky;
     left: 0;
@@ -247,7 +410,6 @@ thead th:first-child {
     background: linear-gradient(135deg, #66ea9d 0%, #105929 100%);
 }
 
-/* Zebra striping */
 tbody tr:nth-child(even) {
     background-color: #f8f9fa;
 }
@@ -256,7 +418,6 @@ tbody tr:hover {
     background-color: #e8f8eb;
 }
 
-/* Cell hover effect */
 tbody td:not(:first-child):hover {
     background-color: #d1f1da;
     transform: scale(1.05);
@@ -265,17 +426,57 @@ tbody td:not(:first-child):hover {
     box-shadow: 0 0 10px rgba(102, 234, 111, 0.3);
 }
 
-/* Responsive design */
-@media (max-width: 768px) {
-    .form-row {
+/* animations */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* responsive design */
+@media (max-width: 1200px) {
+    .main-content {
         grid-template-columns: 1fr;
     }
     
+    .preview-container {
+        margin-top: 0;
+    }
+}
+
+@media (max-width: 768px) {
     h1 {
         font-size: 2em;
     }
     
-    .form-container {
+    .main-content {
         padding: 20px;
+    }
+    
+    #tabs .ui-tabs-nav li a {
+        padding: 8px 12px;
+        font-size: 14px;
+    }
+    
+    .button-group button {
+        display: block;
+        width: 100%;
+        margin: 10px 0;
     }
 }
