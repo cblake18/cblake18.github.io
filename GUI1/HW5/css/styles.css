@@ -9,7 +9,7 @@
 
 body {
     font-family: Arial, sans-serif;
-    background-color: #2c3e50;
+    background-color: #ffc7e0;
     color: white;
     margin: 0;
     padding: 20px;
@@ -18,7 +18,7 @@ body {
 .game-container {
     max-width: 1200px;
     margin: 0 auto;
-    background-color: #34495e;
+    background-color: #f2a1d3;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0,0,0,0.3);
@@ -28,13 +28,17 @@ h1 {
     text-align: center;
     margin-bottom: 30px;
     color: #ecf0f1;
+    box-shadow: #000000;
+    text-shadow: #000000;
+    box-shadow: #000000;
+    
 }
 
 /* Score Display */
 .score-section {
     text-align: center;
     margin-bottom: 20px;
-    background-color: #2c3e50;
+    background-color: #ffcff3;
     padding: 15px;
     border-radius: 8px;
 }
@@ -184,7 +188,7 @@ h1 {
 }
 
 button {
-    background-color: #3498db;
+    background-color: #d74db9;
     color: white;
     border: none;
     padding: 12px 24px;
