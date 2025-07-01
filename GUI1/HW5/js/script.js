@@ -43,22 +43,12 @@ const letterDistribution = {
 
 const dictionary = [];
 
-function loadDictionary() {
-    // Load from a text file
-    $.get('data/dictionary.txt', function(data) {
-        const words = data.toUpperCase().split('\n');
-        dictionary.push(...words);
-    });
-}
-
 // Game state variables
 let tileBag = [];
 let currentScore = 0;
 let totalScore = 0;
 let boardState = [];
 let placedTiles = [];
-let insertionIndex = -1; // Track where to insert
-let $insertionIndicator = null; // Reference to indicator element
 
 // Board configuration - 15 squares with various bonuses
 const boardConfig = [
@@ -79,7 +69,7 @@ const boardConfig = [
     { type: 'normal', multiplier: 1 }
 ];
 
-/*
+/**
  * Initialize the tile bag with all tiles according to distribution
  */
 function initializeTileBag() {
@@ -171,10 +161,6 @@ function createTileElement(tile) {
         revert: function(dropped) {
             // If not dropped on a valid target, return to rack
             if (!dropped) {
-                // Clear insertion indicator
-                $insertionIndicator.hide();
-                insertionIndex = -1;
-                
                 const rack = $('#tile-rack');
                 $(this).css({
                     position: 'relative',
@@ -203,19 +189,12 @@ function createTileElement(tile) {
         start: function(event, ui) {
             $(this).css('z-index', 1000);
         },
-        drag: function(event, ui) {
-            // Check for insertion while dragging
-            checkForInsertion(ui.position);
-        },
         stop: function(event, ui) {
             $(this).css('z-index', 100);
-            // Hide insertion indicator
-            $insertionIndicator.hide();
-            insertionIndex = -1;
         }
     });
     
-    return tileDiv; // return the tile
+    return tileDiv;
 }
 
 /**
@@ -237,39 +216,19 @@ function dealInitialTiles() {
 function handleTileDrop(square, tile) {
     const squareIndex = parseInt(square.attr('data-index'));
     
-    // NEW: Check if this is an insertion
-    if (insertionIndex > -1 && insertionIndex === squareIndex) {
-        // Remove tile from previous position if it was already on the board
-        const previousIndex = placedTiles.findIndex(p => p.tile[0] === tile[0]);
-        if (previousIndex !== -1) {
-            const previousPlaced = placedTiles[previousIndex];
-            boardState[previousPlaced.index] = null;
-            $('.board-square[data-index="' + previousPlaced.index + '"]').removeClass('occupied');
-            placedTiles.splice(previousIndex, 1);
-        }
-        
-        // Perform insertion
-        if (!insertTile(tile, insertionIndex)) {
-            // If insertion failed, return tile to rack
-            tile.css({
-                position: 'relative',
-                left: 0,
-                top: 0,
-                zIndex: 100
-            });
-            $('#tile-rack').append(tile);
-            return;
-        }
-    }
-    
     // Check if square is already occupied
     if (boardState[squareIndex]) {
-        // NEW: If dropping on occupied square, try insertion
-        if (insertionIndex > -1) {
-            handleTileDrop($('.board-square[data-index="' + insertionIndex + '"]'), tile);
-            return;
-        }
         showMessage('That square is already occupied!', 'error');
+        // Force revert
+        tile.draggable('option', 'revert', true);
+        return;
+    }
+    
+    // Check if placement is valid (adjacent to other tiles after first tile)
+    if (placedTiles.length > 0 && !isValidPlacement(squareIndex)) {
+        showMessage('Tiles must be placed adjacent to each other!', 'error');
+        // Force revert
+        tile.draggable('option', 'revert', true);
         return;
     }
     
@@ -310,8 +269,31 @@ function handleTileDrop(square, tile) {
     square.addClass('occupied');
     tile.addClass('placed');
     
-    // Keep tile draggable so it can be moved again
-    tile.draggable('enable');
+    // Reset revert option for next drag
+    tile.draggable('option', 'revert', function(dropped) {
+        if (!dropped) {
+            const rack = $('#tile-rack');
+            $(this).css({
+                position: 'relative',
+                left: 0,
+                top: 0,
+                zIndex: 100
+            });
+            rack.append($(this));
+            
+            const placedIndex = placedTiles.findIndex(p => p.tile[0] === this);
+            if (placedIndex !== -1) {
+                const placed = placedTiles[placedIndex];
+                boardState[placed.index] = null;
+                $('.board-square[data-index="' + placed.index + '"]').removeClass('occupied');
+                placedTiles.splice(placedIndex, 1);
+                updateWordDisplay();
+                calculateScore();
+            }
+            return false;
+        }
+        return false;
+    });
     
     // Update display
     updateWordDisplay();
@@ -446,6 +428,9 @@ function submitWord() {
     $('#current-word').text('---');
 }
 
+/**
+ * Check if word is valid
+ */
 function isValidWord(word) {
     // check against our dictionary file
     return dictionary.includes(word.toUpperCase());
@@ -515,110 +500,19 @@ function getNewTiles() {
 }
 
 /**
- * Check if dragging between tiles for insertion
- */
-function checkForInsertion(dragPosition) {
-    if (placedTiles.length < 2) {
-        $insertionIndicator.hide();
-        insertionIndex = -1;
-        return;
-    }
-    
-    // Sort placed tiles by position
-    const sortedTiles = [...placedTiles].sort((a, b) => a.index - b.index);
-    
-    // Check if drag position is between any two adjacent tiles
-    for (let i = 0; i < sortedTiles.length - 1; i++) {
-        const leftTile = sortedTiles[i];
-        const rightTile = sortedTiles[i + 1];
-        
-        // Only check if tiles are adjacent
-        if (rightTile.index - leftTile.index === 1) {
-            const leftSquare = $('.board-square[data-index="' + leftTile.index + '"]');
-            const rightSquare = $('.board-square[data-index="' + rightTile.index + '"]');
-            
-            const leftPos = leftSquare.offset();
-            const rightPos = rightSquare.offset();
-            const gapCenter = leftPos.left + leftSquare.width();
-            
-            // Check if drag position is near the gap
-            if (Math.abs(dragPosition.left + 33 - gapCenter) < 20) { // 33 is half tile width
-                // Show indicator
-                $insertionIndicator.css({
-                    left: gapCenter - 2,
-                    top: leftPos.top,
-                    display: 'block'
-                });
-                insertionIndex = rightTile.index;
-                return;
-            }
-        }
-    }
-    
-    // Hide indicator if not near any gap
-    $insertionIndicator.hide();
-    insertionIndex = -1;
-}
-
-/**
- * Insert tile between existing tiles
- */
-function insertTile(tile, atIndex) {
-    // Shift all tiles to the right of insertion point
-    const tilesToShift = placedTiles.filter(p => p.index >= atIndex);
-    
-    // Check if there's room to shift
-    const maxIndex = Math.max(...tilesToShift.map(t => t.index));
-    if (maxIndex >= boardConfig.length - 1) {
-        showMessage('No room to insert tile here!', 'error');
-        return false;
-    }
-    
-    // Shift tiles in reverse order to avoid conflicts
-    tilesToShift.sort((a, b) => b.index - a.index);
-    
-    tilesToShift.forEach(placed => {
-        const oldIndex = placed.index;
-        const newIndex = oldIndex + 1;
-        
-        // Update board state
-        boardState[newIndex] = boardState[oldIndex];
-        boardState[oldIndex] = null;
-        
-        // Update square classes
-        $('.board-square[data-index="' + oldIndex + '"]').removeClass('occupied');
-        $('.board-square[data-index="' + newIndex + '"]').addClass('occupied');
-        
-        // Update placed tile index
-        placed.index = newIndex;
-        
-        // Animate tile position
-        const newSquare = $('.board-square[data-index="' + newIndex + '"]');
-        const squarePos = newSquare.position();
-        const boardPos = $('#scrabble-board').position();
-        
-        placed.tile.addClass('tile-shifting');
-        placed.tile.css({
-            left: squarePos.left + boardPos.left + (newSquare.width() - placed.tile.width()) / 2,
-            top: squarePos.top + boardPos.top + (newSquare.height() - placed.tile.height()) / 2
-        });
-        
-        setTimeout(() => placed.tile.removeClass('tile-shifting'), 200);
-    });
-    
-    // Place new tile at insertion point
-    const insertSquare = $('.board-square[data-index="' + atIndex + '"]');
-    handleTileDrop(insertSquare, tile);
-    
-    return true;
-}
-
-/**
  * Reset the entire game
  */
 function resetGame() {
+    // Clear all tiles from DOM first
+    $('.letter-tile').remove();
+    
+    // Reset all state
+    placedTiles = [];
+    boardState = new Array(boardConfig.length).fill(null);
+    $('.board-square').removeClass('occupied');
+    
+    // Reinitialize
     initializeTileBag();
-    clearBoard();
     dealInitialTiles();
     totalScore = 0;
     currentScore = 0;
@@ -652,16 +546,17 @@ $(document).ready(function() {
         console.log(`Loaded ${dictionary.length} words`);
     }).fail(function() {
         console.log('Using default dictionary');
+        // Add some default words for testing
+        dictionary.push(
+            "CAT", "DOG", "HOUSE", "THE", "AND", "FOR", "ARE", "BUT", "NOT",
+            "YOU", "ALL", "CAN", "HER", "WAS", "ONE", "OUR", "OUT", "DAY"
+        );
     });
     
     // Initialize game
     initializeTileBag();
     createBoard();
     dealInitialTiles();
-
-    // Create insertion indicator
-    $insertionIndicator = $('<div class="insertion-indicator"></div>');
-    $('.board-container').append($insertionIndicator);
     
     // Button event handlers
     $('#submit-word').click(submitWord);
