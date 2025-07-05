@@ -1,9 +1,10 @@
 /*
+ * Copyright 2025 Christian Blake
  * File: styles.css
  * GUI Assignment: Scrabble Game
  * Description: Styles for the single-line Scrabble game implementation
  * 
- * This file contains all the styling for the Scrabble game including
+ * contains all the styling for the Scrabble game including
  * board layout, tile styling, rack positioning, and UI elements.
  */
 
@@ -34,7 +35,7 @@ h1 {
     
 }
 
-/* Score Display */
+/* score display */
 .score-section {
     text-align: center;
     margin-bottom: 20px;
@@ -55,7 +56,7 @@ h1 {
     color: #e74c3c;
 }
 
-/* Game Board Container */
+/* game board container */
 .board-container {
     display: flex;
     justify-content: center;
@@ -63,7 +64,7 @@ h1 {
     position: relative;
 }
 
-/* Board Image */
+/* board image */
 #scrabble-board {
     position: relative;
     display: inline-block;
@@ -75,7 +76,7 @@ h1 {
     height: 80;
 }
 
-/* Board squares overlay for drop zones */
+/* board squares overlay for drop zones */
 .board-squares-overlay {
     position: absolute;
     top: 0;
@@ -101,7 +102,7 @@ h1 {
     cursor: not-allowed;
 }
 
-/* Tile Rack */
+/* tile rack */
 .rack-container {
     display: flex;
     justify-content: center;
@@ -112,6 +113,8 @@ h1 {
 #tile-rack-holder {
     position: relative;
     display: inline-block;
+    padding: 20px;
+    margin: -20px;
 }
 
 #rack-image {
@@ -120,7 +123,7 @@ h1 {
     height: 182px;
 }
 
-/* Rack overlay for organizing tiles */
+/* rack overlay for organizing tiles */
 #tile-rack {
     position: absolute;
     top: 50%;
@@ -131,7 +134,7 @@ h1 {
     padding: 10px;
 }
 
-/* Letter Tiles */
+/* letter tiles */
 .letter-tile {
     width: 66px; /* actual img width 165px */
     height: 72px; /* actual img height 180px */
@@ -155,7 +158,7 @@ h1 {
     cursor: default;
 }
 
-/* Fallback tile style when images are missing */
+/* fallback tile style when images are missing */
 .tile-fallback {
     width: 100%;
     height: 100%;
@@ -181,7 +184,7 @@ h1 {
     right: 4px;
 }
 
-/* Controls */
+/* controls */
 .controls {
     text-align: center;
     margin-top: 30px;
@@ -208,7 +211,7 @@ button:disabled {
     cursor: not-allowed;
 }
 
-/* Messages */
+/* messages */
 .message {
     text-align: center;
     margin-top: 20px;
@@ -224,7 +227,7 @@ button:disabled {
     color: #2ecc71;
 }
 
-/* Info Section */
+/* info section */
 .info-section {
     margin-top: 30px;
     padding: 20px;
@@ -252,7 +255,7 @@ button:disabled {
     margin: 10px auto;
 }
 
-/* Legend for bonus squares */
+/* legend for bonus squares */
 .legend {
     margin-top: 20px;
     text-align: center;
@@ -271,4 +274,55 @@ button:disabled {
     margin-right: 5px;
     vertical-align: middle;
     border: 1px solid #34495e;
+}
+
+/* jQuery UI dialog customization for blank tile selection */
+.ui-dialog {
+    background: #f2a1d3;
+    border: 2px solid #d74db9;
+    border-radius: 10px;
+}
+
+.ui-dialog-titlebar {
+    background: #d74db9;
+    color: white;
+    border: none;
+    border-radius: 8px 8px 0 0;
+}
+
+.ui-dialog-content {
+    background: white;
+    color: #333;
+}
+
+/* blank tile letter selection buttons */
+.ui-dialog-content button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.ui-dialog-content button:hover {
+    background-color: #2980b9;
+    transform: scale(1.1);
+}
+
+/* update blank tile display */
+.letter-tile[data-chosen-letter] .tile-fallback .letter {
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+/* rack drop zone visual feedback */
+#tile-rack-holder.ui-droppable-hover,
+#tile-rack.ui-droppable-hover {
+    background-color: rgba(255, 255, 255, 0.3);
+    border: 2px dashed #3498db;
+    border-radius: 10px;
 }
